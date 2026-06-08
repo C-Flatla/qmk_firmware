@@ -2,14 +2,16 @@
 
 #define EE_HANDS
 
+/* Matrix */
 #define MATRIX_ROW_PINS { GP2, GP3, GP4, GP5, GP6, GP7 }
 #define MATRIX_COL_PINS { GP8, GP9, GP26, GP27, GP28, GP29 }
 
+/* Reset */
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET // Activates the double-tap behavior
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_TIMEOUT 200U // Timeout window in ms in which the double tap can occur.
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP17 // Specify a optional status led by GPIO number which blinks when entering the bootloader
 
-// TODO: Figure out what's needed to get trackball working
+/* Trackball */
 // #define POINTING_DEVICE_DEBUG
 // #define SPLIT_POINTING_ENABLE
 // #define POINTING_DEVICE_RIGHT
