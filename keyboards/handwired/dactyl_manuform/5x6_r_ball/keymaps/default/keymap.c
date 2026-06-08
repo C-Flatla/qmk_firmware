@@ -3,6 +3,11 @@
 
 #include QMK_KEYBOARD_H
 
+enum custom_keycodes {
+    PTR_DIS = SAFE_RANGE,
+    PTR_EN,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
         KC_ESC,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,   KC_0,     KC_EQL,
@@ -26,8 +31,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F12,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, PTR_DIS, PTR_EN, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_MPLY, KC_MUTE, KC_VOLD, KC_VOLU, _______, KC_DEL,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, KC_HOME, KC_END
     )
 };
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+#ifdef POINTING_DEVICE_ENABLE
+    switch (keycode) {
+        case PTR_DIS:
+            if (record->event.pressed) {
+                pointing_device_set_status(POINTING_DEVICE_STATUS_FAILED);
+            }
+            return false;
+        case PTR_EN:
+            if (record->event.pressed) {
+                pointing_device_set_status(POINTING_DEVICE_STATUS_SUCCESS);
+            }
+            return false;
+    }
+#endif
+    return true;
+}
