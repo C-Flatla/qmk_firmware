@@ -54,3 +54,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #endif
     return true;
 }
+
+// void keyboard_post_init_user(void) {
+//     debug_enable = true;
+//     debug_matrix = true;
+//     debug_keyboard = true;
+//     debug_mouse  = true;
+// }
+
+// report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+//     const int16_t x = mouse_report.x;
+//     const int16_t y = mouse_report.y;
+
+// #ifdef POINTING_DEVICE_MAX_DELTA
+//     if (x > POINTING_DEVICE_MAX_DELTA || x < -POINTING_DEVICE_MAX_DELTA || y > POINTING_DEVICE_MAX_DELTA || y < -POINTING_DEVICE_MAX_DELTA) {
+//         mouse_report.x = 0;
+//         mouse_report.y = 0;
+//         return mouse_report;
+//     }
+// #endif
+
+// #ifdef POINTING_DEVICE_DEADZONE
+//     const int32_t deadzone_sq  = (int32_t)POINTING_DEVICE_DEADZONE * POINTING_DEVICE_DEADZONE;
+//     const int32_t magnitude_sq = (int32_t)x * x + (int32_t)y * y;
+
+//     if (magnitude_sq < deadzone_sq) {
+//         mouse_report.x = 0;
+//         mouse_report.y = 0;
+//     }
+// #endif
+
+//     return mouse_report;
+// }
