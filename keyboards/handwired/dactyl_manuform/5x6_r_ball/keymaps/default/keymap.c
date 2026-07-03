@@ -55,12 +55,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// void keyboard_post_init_user(void) {
-//     debug_enable = true;
-//     debug_matrix = true;
-//     debug_keyboard = true;
-//     debug_mouse  = true;
-// }
+void keyboard_post_init_user(void) {
+    debug_enable = true;
+    // debug_matrix = true;
+    // debug_keyboard = true;
+    debug_mouse  = true;
+}
 
 // report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 //     const int16_t x = mouse_report.x;
