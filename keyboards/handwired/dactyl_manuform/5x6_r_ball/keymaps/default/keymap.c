@@ -6,6 +6,8 @@
 enum custom_keycodes {
     PTR_DIS = SAFE_RANGE,
     PTR_EN,
+    PTR_CPII,
+    PTR_CPID,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -31,7 +33,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F12,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, PTR_DIS, PTR_EN, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+        _______, PTR_DIS, PTR_EN, PTR_CPID, PTR_CPII, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_MPLY, KC_MUTE, KC_VOLD, KC_VOLU, _______, KC_DEL,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, KC_HOME, KC_END
     )
@@ -40,14 +42,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef POINTING_DEVICE_ENABLE
     switch (keycode) {
-        case PTR_DIS:
+        case PTR_DIS: /* Disable trackball */
             if (record->event.pressed) {
                 pointing_device_set_status(POINTING_DEVICE_STATUS_FAILED);
             }
             return false;
-        case PTR_EN:
+        case PTR_EN: /* Enable trackball */
             if (record->event.pressed) {
                 pointing_device_set_status(POINTING_DEVICE_STATUS_SUCCESS);
+            }
+            return false;
+        case PTR_CPII: /* Increase trackball CPI */
+            if (record->event.pressed) {
+                pointing_device_set_cpi(pointing_device_get_cpi()+100);
+                dprintf("CPI: %u\n", pointing_device_get_cpi());
+            }
+            return false;
+        case PTR_CPID: /* Decrease trackball CPI */
+            if (record->event.pressed) {
+                pointing_device_set_cpi(pointing_device_get_cpi()-100);
+                dprintf("CPI: %u\n", pointing_device_get_cpi());
             }
             return false;
     }
