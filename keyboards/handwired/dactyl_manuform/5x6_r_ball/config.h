@@ -12,21 +12,17 @@
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP17 // Specify a optional status led by GPIO number which blinks when entering the bootloader
 
 /* Trackball */
-#define POINTING_DEVICE_DEBUG
-// #define SPLIT_POINTING_ENABLE
-// #define POINTING_DEVICE_RIGHT
-// #define SPI_DRIVER SPID0
 #define SPI_SCK_PIN GP18
 #define SPI_MISO_PIN GP20
 #define SPI_MOSI_PIN GP19
 #define PMW33XX_CS_PIN GP10
 
 /* Sensor tuning (stock pmw3360 driver; set at init) */
-#define PMW33XX_CPI 1000                // 100-12000, increments of 100. Default 1600.
+// #define POINTING_DEVICE_DEBUG
+#define PMW33XX_CPI 800                  // 100-12000, increments of 100. Default 1600.
+#define MOUSE_EXTENDED_REPORT             // Use -32767 to 32767, instead of just -127 to 127.
+#define POINTING_DEVICE_INVERT_X          // Invert left/right movement
 // #define PMW33XX_LIFTOFF_DISTANCE 0x02  // PixArt default; sensor sets is_lifted when ball is away from lens.
-// #define PMW33XX_CLOCK_SPEED 2000000 // Default 2000000
-// #define PMW33XX_SPI_DIVISOR 64      // Default varies by platform
-#define MOUSE_EXTENDED_REPORT          // Use -32767 to 32767, instead of just -127 to 127.
-
-// #define POINTING_DEVICE_DEADZONE 10    // Sensor counts; idle jitter is ±1-5.
-// #define POINTING_DEVICE_MAX_DELTA 80   // Per-axis cap; seated slip ~20.
+// #define PMW33XX_CLOCK_SPEED 2000000    // Default 2000000
+// #define PMW33XX_SPI_DIVISOR 64         // Default varies by platform
+// #define POINTING_DEVICE_TASK_THROTTLE_MS 10
