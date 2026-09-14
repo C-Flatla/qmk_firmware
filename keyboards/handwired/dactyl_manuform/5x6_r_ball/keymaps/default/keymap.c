@@ -8,7 +8,18 @@ enum custom_keycodes {
     PTR_EN,
     PTR_CPII,
     PTR_CPID,
+    DRAG_SCROLL,
 };
+
+bool set_scrolling = false;
+
+// Modify these values to adjust the scrolling speed
+#define SCROLL_DIVISOR_H 100.0
+#define SCROLL_DIVISOR_V 100.0
+
+// Variables to store accumulated scroll values
+float scroll_accumulated_h = 0;
+float scroll_accumulated_v = 0;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT(
@@ -32,7 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [2] = LAYOUT(
         _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_F12,
-        _______, _______, _______, _______, _______, _______, _______, QK_MOUSE_BUTTON_1, QK_MOUSE_BUTTON_2, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, QK_MOUSE_BUTTON_1, QK_MOUSE_BUTTON_2, DRAG_SCROLL, _______, _______,
         _______, PTR_DIS, PTR_EN, PTR_CPID, PTR_CPII, _______, _______, _______, _______, _______, _______, _______,
         _______, KC_MPLY, KC_MUTE, KC_VOLD, KC_VOLU, _______, KC_HOME,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, KC_END, KC_DEL
@@ -64,9 +75,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 dprintf("CPI: %u\n", pointing_device_get_cpi());
             }
             return false;
+        case DRAG_SCROLL: /* Toggle drag scrolling */
+            if (record->event.pressed) {
+                set_scrolling = !set_scrolling;
+            }
+            return false;
     }
 #endif
     return true;
+}
+
+report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    if (set_scrolling) {
+        // Calculate and accumulate scroll values based on mouse movement and divisors
+        scroll_accumulated_h += (float)mouse_report.x / SCROLL_DIVISOR_H;
+        scroll_accumulated_v -= (float)mouse_report.y / SCROLL_DIVISOR_V;
+
+        // Assign integer parts of accumulated scroll values to the mouse report
+        mouse_report.h = (int8_t)scroll_accumulated_h;
+        mouse_report.v = (int8_t)scroll_accumulated_v;
+
+        // Update accumulated scroll values by subtracting the integer parts
+        scroll_accumulated_h -= (int8_t)scroll_accumulated_h;
+        scroll_accumulated_v -= (int8_t)scroll_accumulated_v;
+
+        mouse_report.x = 0;
+        mouse_report.y = 0;
+    }
+    return mouse_report;
 }
 
 void keyboard_post_init_user(void) {
