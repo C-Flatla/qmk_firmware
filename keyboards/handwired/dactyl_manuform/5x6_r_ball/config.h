@@ -16,6 +16,8 @@
 #define SPI_MISO_PIN GP20
 #define SPI_MOSI_PIN GP19
 #define PMW33XX_CS_PIN GP10
+#define POINTING_DEVICE_AUTO_MOUSE_ENABLE
+#define AUTO_MOUSE_DEFAULT_LAYER 1
 
 /* Sensor tuning (stock pmw3360 driver; set at init) */
 // #define POINTING_DEVICE_DEBUG
