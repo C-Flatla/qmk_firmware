@@ -21,9 +21,11 @@
 
 /* Sensor tuning (stock pmw3360 driver; set at init) */
 // #define POINTING_DEVICE_DEBUG
-#define PMW33XX_CPI 1600                  // 100-12000, increments of 100. Default 1600.
+#define PMW33XX_CPI 1400                  // 100-12000, increments of 100. Default 1600.
 #define MOUSE_EXTENDED_REPORT             // Use -32767 to 32767, instead of just -127 to 127.
-#define POINTING_DEVICE_INVERT_X          // Invert left/right movement
+// #define POINTING_DEVICE_INVERT_X          // Invert left/right movement
+#define POINTING_DEVICE_INVERT_Y          // Invert up/down movement
+#define POINTING_DEVICE_ROTATION_90
 // #define PMW33XX_LIFTOFF_DISTANCE 0x02  // PixArt default; sensor sets is_lifted when ball is away from lens.
 // #define PMW33XX_CLOCK_SPEED 2000000    // Default 2000000
 // #define PMW33XX_SPI_DIVISOR 64         // Default varies by platform

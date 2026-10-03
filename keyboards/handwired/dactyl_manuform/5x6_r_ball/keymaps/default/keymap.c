@@ -9,8 +9,10 @@ enum custom_keycodes {
     PTR_CPII,
     PTR_CPID,
     DRAG_SCROLL,
+    PTR_CPI_SLOW,
 };
 
+uint16_t current_cpi;
 bool set_scrolling = false;
 
 // Modify these values to adjust the scrolling speed
@@ -34,7 +36,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [1] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, QK_MOUSE_BUTTON_1, DRAG_SCROLL, QK_MOUSE_BUTTON_2, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, QK_MOUSE_BUTTON_1, DRAG_SCROLL, QK_MOUSE_BUTTON_2, PTR_CPI_SLOW, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______
@@ -74,18 +76,27 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
         case PTR_CPII: /* Increase trackball CPI */
             if (record->event.pressed) {
-                pointing_device_set_cpi(pointing_device_get_cpi()+100);
-                dprintf("CPI: %u\n", pointing_device_get_cpi());
+                current_cpi = pointing_device_get_cpi() + 100;
+                pointing_device_set_cpi(current_cpi);
+                dprintf("CPI: %u\n", current_cpi);
             }
             return false;
         case PTR_CPID: /* Decrease trackball CPI */
             if (record->event.pressed) {
-                pointing_device_set_cpi(pointing_device_get_cpi()-100);
-                dprintf("CPI: %u\n", pointing_device_get_cpi());
+                current_cpi = pointing_device_get_cpi() - 100;
+                pointing_device_set_cpi(current_cpi);
+                dprintf("CPI: %u\n", current_cpi);
             }
             return false;
         case DRAG_SCROLL: /* Enable drag scrolling when pressed */
             set_scrolling = record->event.pressed;
+            return false;
+        case PTR_CPI_SLOW: /* Set trackball CPI to a predefined "slow" value */
+            if (record->event.pressed) {
+                pointing_device_set_cpi(800);
+            } else {
+                pointing_device_set_cpi(current_cpi);
+            }
             return false;
     }
 #endif
@@ -118,4 +129,5 @@ void keyboard_post_init_user(void) {
     // debug_keyboard = true;
     debug_mouse  = true;
     set_auto_mouse_enable(true);
+    current_cpi = pointing_device_get_cpi();
 }
