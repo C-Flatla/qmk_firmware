@@ -34,9 +34,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [1] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, MS_BTN1, DRAG_SCROLL, MS_BTN2, PTR_CPI_SLOW, _______,
+        _______, _______, _______, _______, _______, _______, _______, MS_BTN1, DRAG_SCROLL, MS_BTN2, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, LGUI(MS_BTN1), LALT(MS_BTN1), LCTL(MS_BTN1), _______, _______,
-        _______, _______, _______, _______, _______, _______, _______,  _______, _______, _______, _______, _______,
+        _______, _______, _______, _______, PTR_CPI_SLOW, _______, _______,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______
     ),
 
@@ -109,6 +109,18 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         mouse_report.y = 0;
     }
     return mouse_report;
+}
+
+bool is_mouse_record_kb(uint16_t keycode, keyrecord_t* record) {
+    switch(keycode) {
+        case PTR_CPI_SLOW:
+            return true;
+        case DRAG_SCROLL:
+            return true;
+        default:
+            return false;
+    }
+    return  is_mouse_record_user(keycode, record);
 }
 
 void keyboard_post_init_user(void) {
