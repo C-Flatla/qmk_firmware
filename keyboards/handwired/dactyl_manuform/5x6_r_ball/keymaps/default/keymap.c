@@ -7,7 +7,8 @@ enum custom_keycodes {
     PTR_CPII = SAFE_RANGE,
     PTR_CPID,
     DRAG_SCROLL,
-    PTR_CPI_SLOW,
+    PTR_HOLD,
+    PTR_SLOW,
 };
 
 uint16_t current_cpi;
@@ -36,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, MS_BTN1, DRAG_SCROLL, MS_BTN2, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, LGUI(MS_BTN1), LALT(MS_BTN1), LCTL(MS_BTN1), _______, _______,
-        _______, _______, _______, _______, PTR_CPI_SLOW, _______, _______,  _______, _______, _______, _______, _______,
+        _______, _______, _______, PTR_SLOW, PTR_HOLD, _______, _______,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______
     ),
 
@@ -79,7 +80,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case DRAG_SCROLL: /* Enable drag scrolling when pressed */
             set_scrolling = record->event.pressed;
             return false;
-        case PTR_CPI_SLOW: /* Set trackball CPI to a predefined "slow" value */
+        case PTR_SLOW: /* Set trackball CPI to a predefined "slow" value */
             if (record->event.pressed) {
                 pointing_device_set_cpi(600);
             } else {
@@ -113,9 +114,11 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
 
 bool is_mouse_record_kb(uint16_t keycode, keyrecord_t* record) {
     switch(keycode) {
-        case PTR_CPI_SLOW:
+        case PTR_HOLD:
             return true;
         case DRAG_SCROLL:
+            return true;
+        case PTR_SLOW:
             return true;
         default:
             return false;
