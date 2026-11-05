@@ -127,10 +127,10 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t* record) {
 }
 
 void keyboard_post_init_user(void) {
-    debug_enable = true;
+    // debug_enable = true;
     // debug_matrix = true;
     // debug_keyboard = true;
-    debug_mouse  = true;
+    // debug_mouse  = true;
     set_auto_mouse_enable(true);
     current_cpi = pointing_device_get_cpi();
 }
