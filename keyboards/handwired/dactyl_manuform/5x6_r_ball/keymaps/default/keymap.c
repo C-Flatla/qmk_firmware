@@ -6,7 +6,8 @@
 enum custom_keycodes {
     PTR_CPII = SAFE_RANGE,
     PTR_CPID,
-    DRAG_SCROLL,
+    SCROLL_DRAG,
+    SCROLL_LOCK,
     PTR_HOLD,
     PTR_SLOW,
 };
@@ -34,8 +35,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [1] = LAYOUT(
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-        _______, _______, _______, _______, _______, _______, _______, MS_BTN1, DRAG_SCROLL, MS_BTN2, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, _______, SCROLL_LOCK, _______, _______, _______,
+        _______, _______, _______, _______, _______, _______, _______, MS_BTN1, SCROLL_DRAG, MS_BTN2, _______, _______,
         _______, _______, _______, _______, _______, _______, _______, LGUI(MS_BTN1), LALT(MS_BTN1), LCTL(MS_BTN1), _______, _______,
         _______, _______, _______, PTR_SLOW, PTR_HOLD, _______, _______,  _______, _______, _______, _______, _______,
         _______, _______, _______, _______, _______, _______, _______
@@ -77,8 +78,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 dprintf("CPI: %u\n", current_cpi);
             }
             return false;
-        case DRAG_SCROLL: /* Enable drag scrolling when pressed */
+        case SCROLL_DRAG: /* Enable drag scrolling when pressed */
             set_scrolling = record->event.pressed;
+            return false;
+        case SCROLL_LOCK: /* Enable scroll hold when pressed */
+            if (record->event.pressed) {
+                set_scrolling = !set_scrolling;
+                if (set_scrolling) {
+                    set_auto_mouse_enable(false);
+                    layer_on(1);
+                } else {
+                    set_auto_mouse_enable(true);
+                }
+            }
             return false;
         case PTR_SLOW: /* Set trackball CPI to a predefined "slow" value */
             if (record->event.pressed) {
@@ -116,7 +128,7 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t* record) {
     switch(keycode) {
         case PTR_HOLD:
             return true;
-        case DRAG_SCROLL:
+        case SCROLL_DRAG:
             return true;
         case PTR_SLOW:
             return true;
